@@ -25,6 +25,41 @@ def add_product():
 
     return redirect(url_for('home'))
 
+@app.route('/update', methods=["POST"])
+def update():
+    id = request.form['id']
+    name = request.form['name']
+    
+    cursor = connection.cursor()
+    cursor.execute("""
+                    UPDATE PRODUCTS 
+                    SET NAME = %s
+                    WHERE PRODUCTS_ID = %s
+                """, (name, id))
+    connection.commit()
+
+    return redirect(url_for('home'))
+
+
+@app.route('/delete/<id>', methods=["GET"])
+def delete(id):
+    cursor = connection.cursor()
+    cursor.execute("""
+                    DELETE FROM PRODUCTS 
+                    WHERE PRODUCTS_ID= %s;
+                """, (id,))
+    connection.commit()
+
+    return redirect(url_for('home'))
+
+
+@app.errorhandler(404)
+def page_not_found(error):  
+    return render_template('page_not_found.html'), 404
+
+@app.errorhandler(500)
+def page_not_found(error):  
+    return render_template('not-found-500.html'), 500
 
 
 if __name__ == "__main__":
