@@ -50,7 +50,7 @@
                             </tbody>
                         </table>
 
-                        <select class="form-select" aria-label="Default select example" action="{{ url_for('order_detail') }}">
+                        <select class="form-select" aria-label="Default select example" action="{{ url_for('Order') }}">
                             {% for do in orderdetail %}
                                 <option value="{{ do.0 }}">{{ do.1 }}</option>
                             {% endfor %}

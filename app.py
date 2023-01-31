@@ -77,8 +77,19 @@ def order():
         cursor = connection.cursor()
         cursor.execute(""" SELECT * FROM ORDERS """)
         orders = cursor.fetchall()
+    
+    cursor = connection.cursor()
+    cursor.execute(""" 
+                        SELECT 
+                                PRODUCTS.PRODUCTS_ID, PRODUCTS.NAME, PRODUCTS.UNIT_PRICE, AMOUNT, TOTAL_PRICE
+                            FROM
+                                ORDER_DETAILS
+                            RIGHT JOIN PRODUCTS ON PRODUCTS.PRODUCTS_ID = ORDER_DETAILS.PRODUCT_ID
+                            LEFT JOIN ORDERS ON ORDERS.ORDER_ID = ORDER_DETAILS.ORDER_ID 
+                  """)
+    order_detail_ = cursor.fetchall() 
 
-        return render_template('order.html', data=orders)
+    return render_template('order.html', data=orders, orderdetail = order_detail_)
 
 
 @app.route('/deleteorder/<id>', methods=["GET"])
